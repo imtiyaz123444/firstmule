@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9be35607-3ad6-419d-8816-d58889562089" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="testcloneFlow" doc:id="beceb927-f70b-462a-a8bf-dec0fa1d105f" >
+		<http:listener doc:name="Listener" doc:id="559e34fe-c84f-4888-b4bb-030dcdc855e9" config-ref="HTTP_Listener_config" path="/git"/>
+		<set-payload value='mule first way' doc:name="Set Payload" doc:id="27d1b773-2c14-42d8-ad16-9cb49cb45c1e" />
+		<ee:transform doc:name="Transform Message" doc:id="20f1bc95-f494-4caf-a6f4-37dda960a816" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b45c7547-dffa-49b6-a077-9f5325faeaf1" message="#[payload]"/>
+	</flow>
+</mule>
